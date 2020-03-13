@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:study_group_app/widgets/navigation_drawer.dart';
 
 import '../providers/study_groups.dart';
 import '../widgets/study_group_list_view.dart';
@@ -23,8 +24,8 @@ class HomePageScreen extends StatelessWidget {
                   ),
             ),
           ],
-          //: Icon(Icons.subject),
         ),
+        drawer: NavigationDrawer(),
         endDrawer: FilterDrawer(),
         body: StudyGroupListView(),
       ),

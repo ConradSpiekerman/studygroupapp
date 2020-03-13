@@ -16,15 +16,17 @@ class FilterDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.purple,
-            ),
-            child: Text(
-              'Apply Filters',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+          Container(
+            height: 110,
+            color: Colors.purple,
+            alignment: Alignment.centerLeft,
+            child: DrawerHeader(
+              child: Text(
+                'Apply Filters',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
               ),
             ),
           ),
