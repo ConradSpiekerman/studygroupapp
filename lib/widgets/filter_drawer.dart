@@ -5,13 +5,29 @@ import 'package:provider/provider.dart';
 import '../providers/study_groups.dart';
 import './filter_study_group_chip.dart';
 
-class FilterDrawer extends StatelessWidget {
+class FilterDrawer extends StatefulWidget {
+  final Set<String> filteredSubjects = {};
+
+  FilterDrawer(Set<String> set) {
+      this.filteredSubjects.addAll(set);
+  }
+
+  @override
+  _FilterDrawerState createState() => _FilterDrawerState();
+}
+
+class _FilterDrawerState extends State<FilterDrawer> {
+
   @override
   Widget build(BuildContext context) {
+    final studyGroupfContainer = Provider.of<StudyGroups>(context, listen: false);
     print("Drawer");
     final subjects = Provider.of<StudyGroups>(context).map.keys;
-    List<FilterChipWidget> list =
-        subjects.map((item) => FilterChipWidget(chipName: item)).toList();
+    List<FilterChipWidget> list = subjects
+        .map((name) => FilterChipWidget(
+            chipName: name,
+            isSelected: studyGroupfContainer.isFiltered(name)))
+        .toList();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -32,7 +48,7 @@ class FilterDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Text('Pick Subject'),
-            trailing: Icon(Icons.subject) ,
+            trailing: Icon(Icons.subject),
           ),
           Padding(
             padding: EdgeInsets.only(left: 8.0),

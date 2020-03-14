@@ -7,8 +7,11 @@ import '../widgets/study_group_list_view.dart';
 import '../widgets/filter_drawer.dart';
 
 class HomePageScreen extends StatelessWidget {
+  final Set<String> filteredSet = {};
+
   @override
   Widget build(BuildContext context) {
+    print(filteredSet.length);
     return ChangeNotifierProvider(
       create: (_) => StudyGroups(),
       child: Scaffold(
@@ -26,7 +29,7 @@ class HomePageScreen extends StatelessWidget {
           ],
         ),
         drawer: NavigationDrawer(),
-        endDrawer: FilterDrawer(),
+        endDrawer: FilterDrawer(filteredSet),
         body: StudyGroupListView(),
       ),
     );

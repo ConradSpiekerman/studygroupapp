@@ -58,9 +58,25 @@ class StudyGroups with ChangeNotifier {
       location: 'CSE2 Lab 110',
     ),
   ];
+  Set<String> _filteredSubjects = {};
 
   List<StudyGroup> get items {
-    return [..._items];
+    if(_filteredSubjects.isEmpty)
+      return [..._items];
+    return _items.where((item) => _filteredSubjects.contains(item.subject)).toList();
+  }
+
+  void removeSubject(String subject){
+    _filteredSubjects.remove(subject);
+    notifyListeners();
+  }
+
+  void addSubject(String subject) {
+     _filteredSubjects.add(subject);
+     notifyListeners();
+  }
+  bool isFiltered(String subject) {
+     return  _filteredSubjects.contains(subject);
   }
   
    Map<String, StudyGroup> get map {

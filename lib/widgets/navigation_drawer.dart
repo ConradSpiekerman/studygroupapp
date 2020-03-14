@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-//import '../providers/study_groups.dart';
-
 class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,6 +16,7 @@ class NavigationDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.add),
             title: Text('Create Event'),
+            onTap: () {},
           ),
           ListTile(
             leading: RotationTransition(
@@ -27,6 +26,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
             title: Text('Log out'),
+            onTap: () {},
           ),
         ],
       ),
