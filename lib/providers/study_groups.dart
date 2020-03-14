@@ -59,11 +59,21 @@ class StudyGroups with ChangeNotifier {
     ),
   ];
   Set<String> _filteredSubjects = {};
+  DateTime _filteredDate;
+  
 
   List<StudyGroup> get items {
     if(_filteredSubjects.isEmpty)
-      return [..._items];
-    return _items.where((item) => _filteredSubjects.contains(item.subject)).toList();
+      return _items.where((item) =>  _isAtTheSameDate(item.dateTime)).toList();
+    return _items.where((item) =>_filteredSubjects.contains(item.subject) 
+       && _isAtTheSameDate(item.dateTime)).toList();
+  }
+
+  bool _isAtTheSameDate(date) {
+      return (_filteredDate == null
+       || (date.year == _filteredDate.year
+       && date.month == _filteredDate.month
+       && date.day == _filteredDate.day));
   }
 
   void removeSubject(String subject){
@@ -75,17 +85,25 @@ class StudyGroups with ChangeNotifier {
      _filteredSubjects.add(subject);
      notifyListeners();
   }
+
   bool isFiltered(String subject) {
      return  _filteredSubjects.contains(subject);
+  }
+
+  void filteredDate(DateTime date) {
+    print(date);
+     this._filteredDate = date;
+     notifyListeners();
+  }
+
+  void clearFilters() {
+    _filteredDate = null;
+    _filteredSubjects.clear();
+    notifyListeners();
   }
   
    Map<String, StudyGroup> get map {
     // TODO: Do a deep copy 
     return _map;
-  }
-
-  void addStudyGroup() {
-    // _items.add();
-    notifyListeners();
   }
 }

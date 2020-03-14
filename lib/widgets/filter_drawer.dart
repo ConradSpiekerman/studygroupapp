@@ -56,16 +56,26 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
           ),
           OutlineButton(
+              child: ListTile(
+                title: Text('Pick a date'),
+                leading: Icon(Icons.access_time),
+              ),
+              onPressed: () => showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(3000),
+                  ).then((date) {
+                    studyGroupContainer.filteredDate(date);
+                  })),
+          OutlineButton(
             child: ListTile(
-              title: Text('Pick a date'),
-              leading: Icon(Icons.access_time),
+              title: Text('Clear Filters'),
+              leading: Icon(Icons.clear),
             ),
-            onPressed: () => showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2020),
-                lastDate: DateTime(2030),
-            )
+            onPressed: () {
+              studyGroupContainer.clearFilters();
+            },
           ),
         ],
       ),
