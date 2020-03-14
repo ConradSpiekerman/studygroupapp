@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'dart:math';
+// import 'package:intl/intl.dart';
 
 import '../models/study_group.dart';
 
@@ -40,6 +42,7 @@ class StudyGroupItem extends StatelessWidget {
                         ),
                         Text(
                           studyGroup.dateTime.toString(),
+                           // DateFormat('dd/MM/yyyy hh:mm').format(studyGroup.dateTime),
                           style: TextStyle(
                             fontSize: 20,
                           ),
