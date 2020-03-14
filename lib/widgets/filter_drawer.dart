@@ -9,7 +9,7 @@ class FilterDrawer extends StatefulWidget {
   final Set<String> filteredSubjects = {};
 
   FilterDrawer(Set<String> set) {
-      this.filteredSubjects.addAll(set);
+    this.filteredSubjects.addAll(set);
   }
 
   @override
@@ -17,16 +17,15 @@ class FilterDrawer extends StatefulWidget {
 }
 
 class _FilterDrawerState extends State<FilterDrawer> {
-
   @override
   Widget build(BuildContext context) {
-    final studyGroupfContainer = Provider.of<StudyGroups>(context, listen: false);
+    final studyGroupContainer =
+        Provider.of<StudyGroups>(context, listen: false);
     print("Drawer");
     final subjects = Provider.of<StudyGroups>(context).map.keys;
     List<FilterChipWidget> list = subjects
         .map((name) => FilterChipWidget(
-            chipName: name,
-            isSelected: studyGroupfContainer.isFiltered(name)))
+            chipName: name, isSelected: studyGroupContainer.isFiltered(name)))
         .toList();
     return Drawer(
       child: ListView(
@@ -47,8 +46,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
           ),
           ListTile(
-            title: Text('Pick Subject'),
-            trailing: Icon(Icons.subject),
+            title: Text('Pick a subject'),
+            leading: Icon(Icons.subject),
           ),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
@@ -56,9 +55,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
               children: list,
             ),
           ),
-          ListTile(
-            title: Text('Pick Date'),
-            trailing: Icon(Icons.access_time),
+          OutlineButton(
+            child: ListTile(
+              title: Text('Pick a date'),
+              leading: Icon(Icons.access_time),
+            ),
+            onPressed: () => showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2020),
+                lastDate: DateTime(2030),
+            )
           ),
         ],
       ),
