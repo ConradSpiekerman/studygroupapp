@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "595077843034",
+    "firebase_url": "https://studygroupapp-3e546.firebaseio.com",
+    "project_id": "studygroupapp-3e546",
+    "storage_bucket": "studygroupapp-3e546.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595077843034:android:43212daa4f6d779e12b063",
+        "android_client_info": {
+          "package_name": "com.example.study_group_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595077843034-mueug6fp9btjbubc276sc23vgvota1ba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1RyM40uCkE5BvpFicLkt3lZUFPH76ugE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595077843034-mueug6fp9btjbubc276sc23vgvota1ba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
