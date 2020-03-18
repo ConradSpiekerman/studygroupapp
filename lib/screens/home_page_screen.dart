@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:study_group_app/widgets/navigation_drawer.dart';
 
-import '../providers/study_groups.dart';
-import '../widgets/study_group_list_view.dart';
 import '../widgets/filter_drawer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

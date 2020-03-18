@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 import '../models/study_group.dart';
 
@@ -69,18 +70,25 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
 
   void _saveForm() {
-    _form.currentState.save();
-    print(_editedStudyGroup.title);
-    print(_editedStudyGroup.subject);
-    print(_editedStudyGroup.location);
-    print(_editedStudyGroup.dateTime);
-    print(_editedStudyGroup.description);
+    final isValid = _form.currentState.validate();
+    if (isValid) _form.currentState.save();
+    print("title " + _editedStudyGroup.title);
+    print("s " + _editedStudyGroup.subject);
+    print("l " + _editedStudyGroup.location);
+    print("d " + _editedStudyGroup.dateTime.toString());
+    print("desc " + _editedStudyGroup.description);
   }
 
   Widget _buildTitleTextField() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Title'),
       textInputAction: TextInputAction.next,
+      validator: (value) {
+        if (value.isEmpty)
+          return "Please enter a title.";
+        else
+          return null;
+      },
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_subjectFocusNode);
       },
@@ -95,6 +103,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Subject'),
       textInputAction: TextInputAction.next,
       focusNode: _subjectFocusNode,
+      validator: (value) {
+        if (value.isEmpty)
+          return "Please enter a subject.";
+        else
+          return null;
+      },
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_locationFocusNode);
       },
@@ -109,6 +123,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Location'),
       textInputAction: TextInputAction.next,
       focusNode: _locationFocusNode,
+      validator: (value) {
+        if (value.isEmpty)
+          return "Please enter a location.";
+        else
+          return null;
+      },
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_dateFocusNode);
       },
@@ -133,17 +153,30 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               controller: dateText,
               readOnly: true,
               focusNode: _dateFocusNode,
+              validator: (value) {
+                if (value.isEmpty) return "Please enter a date.";
+                DateTime currentDate = new DateTime(DateTime.now().year,
+                    DateTime.now().month, DateTime.now().day);
+                if (selectedDate.isBefore(currentDate))
+                  return "Please enter a valid date.";
+                else
+                  return null;
+              },
               onFieldSubmitted: (_) {
                 FocusScope.of(context).requestFocus(_timeFocusNode);
               },
               onTap: () => _selectDate(context),
               onSaved: (String value) {
                 _editedStudyGroup.dateTime = new DateTime(
-                  DateTime.parse(value).year,
-                  DateTime.parse(value).month,
-                  DateTime.parse(value).day,
-                  _editedStudyGroup.dateTime.hour,
-                  _editedStudyGroup.dateTime.minute,
+                  selectedDate.year,
+                  selectedDate.month,
+                  selectedDate.day,
+                  (_editedStudyGroup.dateTime != null)
+                      ? _editedStudyGroup.dateTime.hour
+                      : 0,
+                  (_editedStudyGroup.dateTime != null)
+                      ? _editedStudyGroup.dateTime.minute
+                      : 0,
                 );
               },
             )),
@@ -155,6 +188,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.number,
               focusNode: _timeFocusNode,
+              validator: (value) {
+                if (value.isEmpty) return "Please enter a time.";
+                final currentTime = TimeOfDay.now();
+                if (selectedTime.hour < currentTime.hour ||
+                    (selectedTime.hour == currentTime.hour &&
+                        selectedTime.minute < currentTime.minute))
+                  return "Please enter a valid date.";
+                else
+                  return null;
+              },
               readOnly: true,
               controller: timeText,
               onFieldSubmitted: (_) {
@@ -162,15 +205,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               },
               onTap: () => _selectTime(context),
               onSaved: (String value) {
-                TimeOfDay time = TimeOfDay(
-                    hour: int.parse(value.split(":")[0]),
-                    minute: int.parse(value.split(":")[1]));
                 _editedStudyGroup.dateTime = new DateTime(
-                  _editedStudyGroup.dateTime.year,
-                  _editedStudyGroup.dateTime.month,
-                  _editedStudyGroup.dateTime.day,
-                  time.hour,
-                  time.minute,
+                  (_editedStudyGroup.dateTime != null)
+                      ? _editedStudyGroup.dateTime.year
+                      : 0,
+                  (_editedStudyGroup.dateTime != null)
+                      ? _editedStudyGroup.dateTime.month
+                      : 0,
+                  (_editedStudyGroup.dateTime != null)
+                      ? _editedStudyGroup.dateTime.day
+                      : 0,
+                  selectedTime.hour,
+                  selectedTime.minute,
                 );
               },
             )),
@@ -184,6 +230,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Description'),
       focusNode: _descriptionFocusNode,
       keyboardType: TextInputType.multiline,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(300),
+      ],
       onSaved: (String value) {
         _editedStudyGroup.description = value;
       },
@@ -198,16 +247,20 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         initialDate: selectedDate,
         firstDate: new DateTime(1970, 8),
         lastDate: new DateTime(2101));
-    if (picked != null && picked != selectedDate) setState(() {
-      dateText.text = new DateFormat.yMMMd().format(picked);
-    });
+    if (picked != null)
+      setState(() {
+        dateText.text = new DateFormat.yMMMd().format(picked);
+        selectedDate = picked;
+      });
   }
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay picked =
         await showTimePicker(context: context, initialTime: selectedTime);
-    if (picked != null && picked != selectedTime) setState(() {
-      timeText.text = picked.format(context);
-    });
+    if (picked != null)
+      setState(() {
+        timeText.text = picked.format(context);
+        selectedTime = picked;
+      });
   }
 }
