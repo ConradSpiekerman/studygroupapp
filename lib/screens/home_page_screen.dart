@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:study_group_app/widgets/navigation_drawer.dart';
 
-import '../providers/study_groups.dart';
 import '../widgets/study_group_list_view.dart';
 import '../widgets/filter_drawer.dart';
 
@@ -12,9 +10,7 @@ class HomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(filteredSet.length);
-    return ChangeNotifierProvider(
-      create: (_) => StudyGroups(),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('Home'),
           actions: [
@@ -31,8 +27,7 @@ class HomePageScreen extends StatelessWidget {
         drawer: NavigationDrawer(),
         endDrawer: FilterDrawer(filteredSet),
         body: StudyGroupListView(),
-      ),
-    );
+      );
   }
 }
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:study_group_app/screens/manage_event_screen.dart';
 
-import '../screens/create_event_screen.dart';
+import '../screens/manage_event_screen.dart';
 import '../screens/user_events_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -14,24 +15,32 @@ class NavigationDrawer extends StatelessWidget {
         children: <Widget>[
           Container(
             height: 90,
-                color: Colors.purple,
+            color: Colors.purple,
           ),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () {Navigator.of(context).pushReplacementNamed('/');},
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed('/');
+            },
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.add),
-            title: Text('Create Event'),
-            onTap: () {Navigator.of(context).pushReplacementNamed(CreateEventScreen.routeName);},
+            title: Text('Manage Events'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(ManageEventScreen.routeName);
+            },
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.event),
             title: Text('Your Events'),
-            onTap: () {Navigator.of(context).pushReplacementNamed(UserEventsScreen.routeName); },
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserEventsScreen.routeName);
+            },
           ),
           Divider(),
           ListTile(
