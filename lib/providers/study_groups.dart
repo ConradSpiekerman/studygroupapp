@@ -6,17 +6,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudyGroups with ChangeNotifier {
   Map <String, StudyGroup> _map = {};
+  var lastId = 6;
+
   StudyGroups() {
     print("Study Groups");
     _items.forEach((item) => {_map[item.subject] = item});
     print(_map.length);
   }
 
-  // Dumy Data
+  // Dummy Data
   List<StudyGroup> _items =
-   [
-
-    StudyGroup(
+   [StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
       subject: 'CSE461',
@@ -53,7 +53,7 @@ class StudyGroups with ChangeNotifier {
       location: 'CSE2 Lab 124',
     ),
      StudyGroup(
-      id: 4,
+      id: 5,
       title: 'CSE344 Final Prepration',
       subject: 'CSE344',
       dateTime: DateTime(2020, 2, 10, 2, 45),
@@ -107,8 +107,21 @@ class StudyGroups with ChangeNotifier {
     notifyListeners();
   }
   
-   Map<String, StudyGroup> get map {
+  Map<String, StudyGroup> get map {
     // TODO: Do a deep copy 
     return _map;
   }
+
+  void addSudyGroup(StudyGroup studyGroup) {
+    StudyGroup newGroup = new StudyGroup(
+    id: lastId++,
+    title: studyGroup.title,
+    subject: studyGroup.subject, 
+    location: studyGroup.location,
+    dateTime: studyGroup.dateTime,
+    description: studyGroup.description);
+    _items.insert(0, newGroup);
+    notifyListeners();
+  }
+  
 }

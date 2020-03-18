@@ -1,20 +1,20 @@
 import 'package:flutter/foundation.dart';
 
 class StudyGroup {
-  @required int id;
-  @required String title;
-  @required DateTime dateTime;
-  @required String location;
-  @required String subject;
+  int id;
+  String title;
+  DateTime dateTime;
+  String location;
+  String subject;
   String description = '';
   StudyGroup(
       {
-      this.id, 
-      this.title, 
-      this.subject,
-      this.description,
-      this.dateTime,
-      this.location
+      @required this.id, 
+      @required this.title, 
+      @required this.subject,
+      @required this.description,
+      @required this.dateTime,
+      @required this.location
       });
 
   StudyGroup.explicit(id, title, subject, description, dateTime, location) {

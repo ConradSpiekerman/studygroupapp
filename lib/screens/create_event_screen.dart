@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../models/study_group.dart';
+import '../providers/study_groups.dart';
 
 class CreateEventScreen extends StatefulWidget {
+  static const routeName = '/create_event';
   @override
   _CreateEventScreenState createState() => _CreateEventScreenState();
 }
@@ -46,8 +49,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     print("REBUILT");
     print(selectedDate);
     print(selectedTime);
-    return Padding(
-      padding: EdgeInsets.all(10),
+    return Container(
+      width: double.maxFinite,
+      height: 400,
       child: Form(
         key: _form,
         child: ListView(
@@ -71,7 +75,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState.validate();
-    if (isValid) _form.currentState.save();
+    if (!isValid) return;
+    _form.currentState.save();
+    Provider.of<StudyGroups>(context, listen: false)
+        .addSudyGroup(_editedStudyGroup);
     print("title " + _editedStudyGroup.title);
     print("s " + _editedStudyGroup.subject);
     print("l " + _editedStudyGroup.location);

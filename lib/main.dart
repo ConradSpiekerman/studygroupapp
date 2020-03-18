@@ -5,6 +5,7 @@ import './screens/home_page_screen.dart';
 import './screens/manage_event_screen.dart';
 import './screens/user_events_screen.dart';
 import './providers/study_groups.dart';
+import './screens/create_event_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ManageEventScreen.routeName: (ctx) => ManageEventScreen(),
           UserEventsScreen.routeName: (ctx) => UserEventsScreen(),
+          CreateEventScreen.routeName: (ctx) => CreateEventScreen(),
         },
       ),
     );

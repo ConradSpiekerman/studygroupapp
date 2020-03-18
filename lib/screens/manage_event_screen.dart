@@ -1,38 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:study_group_app/screens/create_event_screen.dart';
 
 import '../widgets/navigation_drawer.dart';
+import '../providers/study_groups.dart';
+import '../widgets/user_event_item.dart';
 import '../screens/create_event_screen.dart';
-import '../screens/user_created_events_screen.dart';
 
 class ManageEventScreen extends StatelessWidget {
   static const routeName = '/manage_event';
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        drawer: NavigationDrawer(),
-        appBar: AppBar(
-          title: Text('Manage Events'),
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.list),
-                text: 'My Events',
-              ),
-              Tab(
-                icon: Icon(Icons.create),
-                text: 'Create Event'
+    final studyGroups = Provider.of<StudyGroups>(context).items;
+    return Scaffold(
+      drawer: NavigationDrawer(),
+      appBar: AppBar(
+        title: Text('Manage Events'),
+      ),
+      body: Container(
+        //padding: EdgeInsets.all(10),
+        color: Colors.grey,
+        child: ListView.builder(
+          itemCount: studyGroups.length,
+          itemBuilder: (_, i) => Column(
+            children: <Widget>[
+              UserEventItem(studyGroups[i]),
+              Divider(
+                color: Colors.deepPurple,
               ),
             ],
           ),
         ),
-        body: TabBarView(
-          children: <Widget>[
-            UserCreatedEventsScreen(),
-            CreateEventScreen()
-          ],
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                AlertDialog(content: CreateEventScreen()),
+          );
+        },
+        // Navigator.of(context).pushReplacementNamed(CreateEventScreen.routeName);
       ),
     );
   }
