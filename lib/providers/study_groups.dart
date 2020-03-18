@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/study_group.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StudyGroups with ChangeNotifier {
   Map <String, StudyGroup> _map = {};
   StudyGroups() {
@@ -11,7 +13,9 @@ class StudyGroups with ChangeNotifier {
   }
 
   // Dumy Data
-  List<StudyGroup> _items = [
+  List<StudyGroup> _items =
+   [
+
     StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
@@ -58,6 +62,7 @@ class StudyGroups with ChangeNotifier {
       location: 'CSE2 Lab 110',
     ),
   ];
+
   Set<String> _filteredSubjects = {};
   DateTime _filteredDate;
   
