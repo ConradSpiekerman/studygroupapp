@@ -16,4 +16,13 @@ class StudyGroup {
       this.dateTime,
       this.location
       });
+
+  StudyGroup.explicit(id, title, subject, description, dateTime, location) {
+    this.id = id;
+    this.title = title;
+    this.subject = subject;
+    this.description = description;
+    this.dateTime = dateTime;
+    this.location = location;
+  }
 }
