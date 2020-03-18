@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class StudyGroup {
-  @required final int id;
+  @required int id;
   @required String title;
   @required DateTime dateTime;
   @required String location;
