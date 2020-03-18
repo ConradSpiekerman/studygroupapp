@@ -24,10 +24,10 @@ class HomePageScreen extends StatelessWidget {
           // change the endDrawer default icon to filter icon
           Builder(
             builder: (context) => IconButton(
-                  icon: Icon(Icons.filter_list),
-                  onPressed: () => Scaffold.of(context).openEndDrawer(),
-                  tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                ),
+              icon: Icon(Icons.filter_list),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            ),
           ),
         ],
       ),
