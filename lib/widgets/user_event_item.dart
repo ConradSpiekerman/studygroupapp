@@ -45,7 +45,7 @@ class UserEventItem extends StatelessWidget {
                        showDialog(
                         context: context,
                         builder: (BuildContext context) =>
-                            DeleteEventScreen(_studyGroup.id),
+                            DeleteEventScreen(_studyGroup.id, false),
                       );
                     },
                     color: Colors.purple,

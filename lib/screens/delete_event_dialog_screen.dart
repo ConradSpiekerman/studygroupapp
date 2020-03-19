@@ -6,9 +6,10 @@ import '../providers/study_groups.dart';
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class DeleteEventScreen extends StatelessWidget {
-  final _idToDelete;
+  final int _idToDelete;
+  final bool _isSavedEvent;
 
-  DeleteEventScreen(this._idToDelete);
+  DeleteEventScreen(this._idToDelete, this._isSavedEvent);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,12 @@ class DeleteEventScreen extends StatelessWidget {
           FlatButton(
             child: const Text('YES'),
             onPressed: () {
-              Provider.of<StudyGroups>(context, listen: false).deleteEvent(_idToDelete);
+              if (_isSavedEvent)
+                Provider.of<StudyGroups>(context, listen: false)
+                    .deleteSavedEvent(_idToDelete);
+              else
+                Provider.of<StudyGroups>(context, listen: false)
+                    .deleteEvent(_idToDelete);
               Navigator.of(context).pop(ConfirmAction.ACCEPT);
             },
           )

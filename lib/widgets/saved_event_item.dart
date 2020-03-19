@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/study_group.dart';
+import '../screens/delete_event_dialog_screen.dart';
 
 class SavedEventItem extends StatelessWidget {
   final StudyGroup _studyGroup;
@@ -27,7 +28,13 @@ class SavedEventItem extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: IconButton(
                 icon: Icon(Icons.delete),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        DeleteEventScreen(_studyGroup.id, true),
+                  );
+                },
                 color: Colors.purple,
               ),
             ),

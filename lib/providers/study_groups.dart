@@ -172,6 +172,14 @@ class StudyGroups with ChangeNotifier {
     }
   }
 
+  void deleteSavedEvent(int deleteId) {
+    final index = _savedEvents.indexWhere((id) => id == deleteId);
+    if (index >= 0) {
+      _savedEvents.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   void saveEvent(int id) {
     _savedEvents.add(id);
     notifyListeners();
