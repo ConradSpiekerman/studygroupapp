@@ -10,7 +10,6 @@ class CreateEventScreen extends StatefulWidget {
   static const routeName = '/create_event';
   final int groupId;
   CreateEventScreen({this.groupId});
-
   @override
   _CreateEventScreenState createState() => _CreateEventScreenState();
 }
@@ -72,7 +71,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     super.didChangeDependencies();
   }
 
-  // Avoid memory leaks, focus node remain
+  // Avoid memory leaks, focus node remains
   // in memory otherwise
   @override
   void dispose() {
@@ -86,9 +85,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("REBUILT");
-    print(selectedDate);
-    print(selectedTime);
     return AlertDialog(
       content: Container(
         width: double.maxFinite,
@@ -106,8 +102,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 child: Text("submit"),
                 color: Colors.deepPurple,
                 onPressed: () {
-                  _saveForm();
-                Navigator.pop(context);
+                  if (_saveForm()) Navigator.pop(context);
                 },
                 focusNode: _subjectFocusNode,
               ),
@@ -118,22 +113,19 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     );
   }
 
-  void _saveForm() {
+  bool _saveForm() {
     final isValid = _form.currentState.validate();
-    if (!isValid) return;
+    if (!isValid) return false;
     _form.currentState.save();
-    if (widget.groupId == null)
+    if (widget.groupId != null) {
+      _editedStudyGroup.id = widget.groupId;
       Provider.of<StudyGroups>(context, listen: false)
           .updateStudyGroup(widget.groupId, _editedStudyGroup);
-    else
+    } else {
       Provider.of<StudyGroups>(context, listen: false)
           .addSudyGroup(_editedStudyGroup);
-
-    // print("title " + _editedStudyGroup.title);
-    // print("s " + _editedStudyGroup.subject);
-    // print("l " + _editedStudyGroup.location);
-    // print("d " + _editedStudyGroup.dateTime.toString());
-    // print("desc " + _editedStudyGroup.description);
+    }
+    return true;
   }
 
   Widget _buildTitleTextField() {
@@ -199,9 +191,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
 
   Widget _buildDateTimePicker() {
-    print("PICK");
-    print(selectedDate);
-    print(selectedTime);
     return new Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -250,10 +239,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               focusNode: _timeFocusNode,
               validator: (value) {
                 if (value.isEmpty) return "Please enter a time.";
-                final currentTime = TimeOfDay.now();
-                if (selectedTime.hour < currentTime.hour ||
-                    (selectedTime.hour == currentTime.hour &&
-                        selectedTime.minute < currentTime.minute))
+                if (!isValidTime(selectedTime))
                   return "Please enter a valid time.";
                 else
                   return null;
@@ -282,6 +268,13 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             )),
       ],
     );
+  }
+
+  bool isValidTime(TimeOfDay time) {
+    final currentDate = DateTime.now();
+    final chosenDate = new DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, selectedTime.hour , selectedTime.minute);
+    return chosenDate.isAfter(currentDate);
   }
 
   Widget _buildDescriptionTextField() {
