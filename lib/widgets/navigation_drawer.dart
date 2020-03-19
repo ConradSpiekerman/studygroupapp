@@ -26,7 +26,7 @@ class NavigationDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.add),
+            leading: Icon(Icons.edit),
             title: Text('Manage Events'),
             onTap: () {
               Navigator.of(context)

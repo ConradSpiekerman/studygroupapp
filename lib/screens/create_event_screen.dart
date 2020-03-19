@@ -102,7 +102,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: RaisedButton(
-                  child: Text("submit"),
+                  child: Text(
+                    "SUBMIT",
+                    style: TextStyle(color: Colors.white70),
+                  ),
                   color: Colors.deepPurple,
                   onPressed: () {
                     if (_saveForm()) Navigator.pop(context);
@@ -277,7 +280,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   bool isValidTime(TimeOfDay time) {
     final currentDate = DateTime.now();
     final chosenDate = new DateTime(selectedDate.year, selectedDate.month,
-        selectedDate.day, selectedTime.hour , selectedTime.minute);
+        selectedDate.day, selectedTime.hour, selectedTime.minute);
     return chosenDate.isAfter(currentDate);
   }
 
