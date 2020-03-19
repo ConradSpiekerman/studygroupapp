@@ -88,7 +88,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return AlertDialog(
       content: Container(
         width: double.maxFinite,
-        height: 400,
+        height: 470,
+        alignment: Alignment.center,
         child: Form(
           key: _form,
           child: ListView(
@@ -98,13 +99,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               _buildLocationTextField(),
               _buildDateTimePicker(),
               _buildDescriptionTextField(),
-              RaisedButton(
-                child: Text("submit"),
-                color: Colors.deepPurple,
-                onPressed: () {
-                  if (_saveForm()) Navigator.pop(context);
-                },
-                focusNode: _subjectFocusNode,
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: RaisedButton(
+                  child: Text("submit"),
+                  color: Colors.deepPurple,
+                  onPressed: () {
+                    if (_saveForm()) Navigator.pop(context);
+                  },
+                  focusNode: _subjectFocusNode,
+                ),
               ),
             ],
           ),
@@ -120,10 +124,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     if (widget.groupId != null) {
       _editedStudyGroup.id = widget.groupId;
       Provider.of<StudyGroups>(context, listen: false)
-          .updateStudyGroup(widget.groupId, _editedStudyGroup);
+          .updateEvent(widget.groupId, _editedStudyGroup);
     } else {
       Provider.of<StudyGroups>(context, listen: false)
-          .addSudyGroup(_editedStudyGroup);
+          .addEvent(_editedStudyGroup);
     }
     return true;
   }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// import 'dart:math';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 import '../models/study_group.dart';
 import '../providers/study_groups.dart';
@@ -39,13 +38,15 @@ class StudyGroupItem extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: Colors.purple,
+                        Container(
+                          margin: EdgeInsets.only(right: 8, bottom: 4),
+                          child: Icon(
+                            Icons.subject,
+                            color: Colors.purple,
+                          ),
                         ),
                         Text(
-                          studyGroup.dateTime.toString(),
-                           // DateFormat('dd/MM/yyyy hh:mm').format(studyGroup.dateTime),
+                          studyGroup.subject,
                           style: TextStyle(
                             fontSize: 20,
                           ),
@@ -54,9 +55,29 @@ class StudyGroupItem extends StatelessWidget {
                     ),
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.purple,
+                        Container(
+                          margin: EdgeInsets.only(right: 8,  bottom: 4),
+                          child: Icon(
+                            Icons.access_time,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('dd/MM/yyyy hh:mm').format(studyGroup.dateTime),
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(right: 8,  bottom: 4),
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.purple,
+                          ),
                         ),
                         Text(
                           studyGroup.location,
@@ -68,9 +89,12 @@ class StudyGroupItem extends StatelessWidget {
                     ),
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.event_note,
-                          color: Colors.purple,
+                        Container(
+                          margin: EdgeInsets.only(right: 8,  bottom: 4),
+                          child: Icon(
+                            Icons.event_note,
+                            color: Colors.purple,
+                          ),
                         ),
                         Expanded(
                           child: Text(
@@ -82,19 +106,22 @@ class StudyGroupItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    width: 40,
-                    height: 40,
-                    child: FlatButton(
-                      color: Colors.deepPurple,
-                      child: Text('RVSP',
-                      style: TextStyle(color: Colors.white70),),
-                      onPressed: () {
-                         Provider.of<StudyGroups>(context, listen: false).saveEvent(studyGroup.id);
-                      },
-                    ),
-                  )
+                    Container(
+                      alignment: Alignment.centerRight,
+                      width: 40,
+                      height: 40,
+                      child: FlatButton(
+                        color: Colors.deepPurple,
+                        child: Text(
+                          'RVSP',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                        onPressed: () {
+                          Provider.of<StudyGroups>(context, listen: false)
+                              .saveEvent(studyGroup.id);
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

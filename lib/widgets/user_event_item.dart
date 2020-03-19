@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:study_group_app/models/study_group.dart';
+import 'package:intl/intl.dart';
+
 import '../screens/create_event_screen.dart';
+import '../screens/delete_event_dialog_screen.dart';
 
 class UserEventItem extends StatelessWidget {
   final StudyGroup _studyGroup;
@@ -31,14 +34,20 @@ class UserEventItem extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) =>
-                             CreateEventScreen(groupId: _studyGroup.id),
+                            CreateEventScreen(groupId: _studyGroup.id),
                       );
                     },
                     color: Colors.deepPurple,
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
-                    onPressed: () {},
+                    onPressed: () {
+                       showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DeleteEventScreen(_studyGroup.id),
+                      );
+                    },
                     color: Colors.purple,
                   ),
                 ],
@@ -53,13 +62,15 @@ class UserEventItem extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.access_time,
-                    color: Colors.purple,
+                  Container(
+                    margin: EdgeInsets.only(right: 8, bottom: 4),
+                    child: Icon(
+                      Icons.subject,
+                      color: Colors.purple,
+                    ),
                   ),
                   Text(
-                    _studyGroup.dateTime.toString(),
-                    // DateFormat('dd/MM/yyyy hh:mm').format(studyGroup.dateTime),
+                    _studyGroup.subject,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -68,9 +79,29 @@ class UserEventItem extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.purple,
+                  Container(
+                    margin: EdgeInsets.only(right: 8, bottom: 4),
+                    child: Icon(
+                      Icons.access_time,
+                      color: Colors.purple,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('dd/MM/yyyy hh:mm').format(_studyGroup.dateTime),
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(right: 8, bottom: 4),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.purple,
+                    ),
                   ),
                   Text(
                     _studyGroup.location,
@@ -82,9 +113,12 @@ class UserEventItem extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.event_note,
-                    color: Colors.purple,
+                  Container(
+                    margin: EdgeInsets.only(right: 8, bottom: 4),
+                    child: Icon(
+                      Icons.event_note,
+                      color: Colors.purple,
+                    ),
                   ),
                   Expanded(
                     child: Text(

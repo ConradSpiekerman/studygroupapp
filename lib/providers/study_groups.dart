@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 import '../models/study_group.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,7 +62,6 @@ class StudyGroups with ChangeNotifier {
       description: 'Let\'s get together and prepare for the Final!',
       location: 'CSE2 Lab 110',
     ),
-    
   ];
 
   Set<String> _filteredSubjects = {};
@@ -114,11 +112,11 @@ class StudyGroups with ChangeNotifier {
 
   StudyGroup findById(int id) {
     try {
-    StudyGroup item = _items.singleWhere((item) => item.id == id);
-    return _copyStudyGroup(item);
-    }on StateError{
+      StudyGroup item = _items.singleWhere((item) => item.id == id);
+      return _copyStudyGroup(item);
+    } on StateError {
       print("No item found with the provided id");
-      return null; 
+      return null;
     }
   }
 
@@ -127,7 +125,7 @@ class StudyGroups with ChangeNotifier {
     return _map;
   }
 
-  void addSudyGroup(StudyGroup studyGroup) {
+  void addEvent(StudyGroup studyGroup) {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
     newGroup.id = lastId++;
     _items.insert(0, newGroup);
@@ -146,7 +144,7 @@ class StudyGroups with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateStudyGroup(int id, StudyGroup newStudyGroup) {
+  void updateEvent(int id, StudyGroup newStudyGroup) {
     final index = _items.indexWhere((item) => item.id == id);
     if (index >= 0) {
       _items[index] = _copyStudyGroup(newStudyGroup);
@@ -166,13 +164,21 @@ class StudyGroups with ChangeNotifier {
     }
   }
 
+  void deleteEvent(int id) {
+    final index = _items.indexWhere((item) => item.id == id);
+    if (index >= 0) {
+      _items.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   void saveEvent(int id) {
     _savedEvents.add(id);
     notifyListeners();
   }
 
   List<StudyGroup> getSavedEvents() {
-     return _savedEvents.map((id) => findById(id)).toList();
+    return _savedEvents.map((id) => findById(id)).toList();
   }
 
   StudyGroup _copyStudyGroup(StudyGroup studyGroup) {
