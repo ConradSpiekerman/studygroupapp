@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import '../models/study_group.dart';
 
@@ -129,6 +131,18 @@ class StudyGroups with ChangeNotifier {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
     newGroup.id = lastId++;
     _items.insert(0, newGroup);
+
+    debugPrint('addStudyGroup');
+    CollectionReference ref = Firestore.instance.collection('groups');
+    Map<String, dynamic> doc = new Map();
+    doc['id'] = newGroup.id;
+    doc['title'] = newGroup.title;
+    doc['subject'] = newGroup.subject;
+    doc['dateTime'] = newGroup.dateTime.toIso8601String();
+    doc['description'] = newGroup.description;
+    doc['location'] = newGroup.location;
+    ref.document(newGroup.id.toString()).setData(doc);
+
     notifyListeners();
   }
 
@@ -136,6 +150,18 @@ class StudyGroups with ChangeNotifier {
     final index = _items.indexWhere((item) => item.id == id);
     if (index >= 0) {
       _items[index] = _copyStudyGroup(newStudyGroup);
+
+      debugPrint('updateStudyGroup');
+      CollectionReference ref = Firestore.instance.collection('groups');
+      Map<String, dynamic> doc = new Map();
+      doc['id'] = _items[index].id;
+      doc['title'] = _items[index].title;
+      doc['subject'] = _items[index].subject;
+      doc['dateTime'] = _items[index].dateTime.toIso8601String();
+      doc['description'] = _items[index].description;
+      doc['location'] = _items[index].location;
+      ref.document(_items[index].id.toString()).setData(doc);
+
       notifyListeners();
     }
   }
