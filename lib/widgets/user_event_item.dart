@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_group_app/models/study_group.dart';
+import '../screens/create_event_screen.dart';
 
 class UserEventItem extends StatelessWidget {
   final StudyGroup _studyGroup;
@@ -27,7 +28,13 @@ class UserEventItem extends StatelessWidget {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                             CreateEventScreen(groupId: _studyGroup.id),
+                      );
+                    },
                     color: Colors.deepPurple,
                   ),
                   IconButton(

@@ -5,7 +5,7 @@ import '../models/study_group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudyGroups with ChangeNotifier {
-  Map <String, StudyGroup> _map = {};
+  Map<String, StudyGroup> _map = {};
   var lastId = 6;
 
   StudyGroups() {
@@ -15,8 +15,8 @@ class StudyGroups with ChangeNotifier {
   }
 
   // Dummy Data
-  List<StudyGroup> _items =
-   [StudyGroup(
+  List<StudyGroup> _items = [
+    StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
       subject: 'CSE461',
@@ -52,53 +52,54 @@ class StudyGroups with ChangeNotifier {
           'Feel free to come if you want to work on past midterm samples together!',
       location: 'CSE2 Lab 124',
     ),
-     StudyGroup(
+    StudyGroup(
       id: 5,
       title: 'CSE344 Final Prepration',
       subject: 'CSE344',
       dateTime: DateTime(2020, 2, 10, 2, 45),
-      description:
-          'Let\'s get together and prepare for the Final!',
+      description: 'Let\'s get together and prepare for the Final!',
       location: 'CSE2 Lab 110',
     ),
   ];
 
   Set<String> _filteredSubjects = {};
   DateTime _filteredDate;
-  
 
   List<StudyGroup> get items {
-    if(_filteredSubjects.isEmpty)
-      return _items.where((item) =>  _isAtTheSameDate(item.dateTime)).toList();
-    return _items.where((item) =>_filteredSubjects.contains(item.subject) 
-       && _isAtTheSameDate(item.dateTime)).toList();
+    if (_filteredSubjects.isEmpty)
+      return _items.where((item) => _isAtTheSameDate(item.dateTime)).toList();
+    return _items
+        .where((item) =>
+            _filteredSubjects.contains(item.subject) &&
+            _isAtTheSameDate(item.dateTime))
+        .toList();
   }
 
   bool _isAtTheSameDate(date) {
-      return (_filteredDate == null
-       || (date.year == _filteredDate.year
-       && date.month == _filteredDate.month
-       && date.day == _filteredDate.day));
+    return (_filteredDate == null ||
+        (date.year == _filteredDate.year &&
+            date.month == _filteredDate.month &&
+            date.day == _filteredDate.day));
   }
 
-  void removeSubject(String subject){
+  void removeSubject(String subject) {
     _filteredSubjects.remove(subject);
     notifyListeners();
   }
 
   void addSubject(String subject) {
-     _filteredSubjects.add(subject);
-     notifyListeners();
+    _filteredSubjects.add(subject);
+    notifyListeners();
   }
 
   bool isFiltered(String subject) {
-     return  _filteredSubjects.contains(subject);
+    return _filteredSubjects.contains(subject);
   }
 
   void filteredDate(DateTime date) {
     print(date);
-     this._filteredDate = date;
-     notifyListeners();
+    this._filteredDate = date;
+    notifyListeners();
   }
 
   void clearFilters() {
@@ -106,22 +107,39 @@ class StudyGroups with ChangeNotifier {
     _filteredSubjects.clear();
     notifyListeners();
   }
-  
+
+  StudyGroup findById(int id) {
+    StudyGroup item = _items.singleWhere((item) => item.id == id);
+    return _copyStudyGroup(item);
+  }
+
   Map<String, StudyGroup> get map {
-    // TODO: Do a deep copy 
+    // TODO: Do a deep copy
     return _map;
   }
 
   void addSudyGroup(StudyGroup studyGroup) {
-    StudyGroup newGroup = new StudyGroup(
-    id: lastId++,
-    title: studyGroup.title,
-    subject: studyGroup.subject, 
-    location: studyGroup.location,
-    dateTime: studyGroup.dateTime,
-    description: studyGroup.description);
+    StudyGroup newGroup = _copyStudyGroup(studyGroup);
+    newGroup.id = lastId++;
     _items.insert(0, newGroup);
     notifyListeners();
   }
-  
+
+  void updateStudyGroup(int id, StudyGroup newStudyGroup) {
+    final index = _items.indexWhere((item) => item.id == id);
+    if (index >= 0) {
+      _items[index] = _copyStudyGroup(newStudyGroup);
+      notifyListeners();
+    }
+  }
+
+  StudyGroup _copyStudyGroup(StudyGroup studyGroup) {
+    return new StudyGroup(
+        id: studyGroup.id,
+        title: studyGroup.title,
+        subject: studyGroup.subject,
+        location: studyGroup.location,
+        dateTime: studyGroup.dateTime,
+        description: studyGroup.description);
+  }
 }

@@ -8,6 +8,9 @@ import '../providers/study_groups.dart';
 
 class CreateEventScreen extends StatefulWidget {
   static const routeName = '/create_event';
+  final int groupId;
+  CreateEventScreen({this.groupId});
+
   @override
   _CreateEventScreenState createState() => _CreateEventScreenState();
 }
@@ -19,10 +22,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   final _timeFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
-  var dateText = TextEditingController();
-  var timeText = TextEditingController();
+  var dateTextController = TextEditingController();
+  var timeTextController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  bool _isInit = true;
   var _editedStudyGroup = StudyGroup(
     id: null,
     title: '',
@@ -31,6 +35,42 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     description: '',
     dateTime: null,
   );
+  var _initValues = {
+    'title': '',
+    'subject': '',
+    'location': '',
+    'description': '',
+    'date': '',
+    'time': '',
+  };
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      if (widget.groupId != null) {
+        _editedStudyGroup = Provider.of<StudyGroups>(context, listen: false)
+            .findById(widget.groupId);
+        _initValues = {
+          'title': _editedStudyGroup.title,
+          'subject': _editedStudyGroup.subject,
+          'location': _editedStudyGroup.location,
+          'description': _editedStudyGroup.description,
+          'date': '',
+          'time': ''
+        };
+        dateTextController.text = new DateFormat.yMMMd().format(new DateTime(
+            _editedStudyGroup.dateTime.year,
+            _editedStudyGroup.dateTime.month,
+            _editedStudyGroup.dateTime.day));
+        timeTextController.text = new TimeOfDay(
+                hour: _editedStudyGroup.dateTime.hour,
+                minute: _editedStudyGroup.dateTime.minute)
+            .format(context);
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   // Avoid memory leaks, focus node remain
   // in memory otherwise
@@ -49,25 +89,30 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     print("REBUILT");
     print(selectedDate);
     print(selectedTime);
-    return Container(
-      width: double.maxFinite,
-      height: 400,
-      child: Form(
-        key: _form,
-        child: ListView(
-          children: <Widget>[
-            _buildTitleTextField(),
-            _buildSubjectTextField(),
-            _buildLocationTextField(),
-            _buildDateTimePicker(),
-            _buildDescriptionTextField(),
-            RaisedButton(
-              child: Text("submit"),
-              color: Colors.deepPurple,
-              onPressed: () => _saveForm(),
-              focusNode: _subjectFocusNode,
-            ),
-          ],
+    return AlertDialog(
+      content: Container(
+        width: double.maxFinite,
+        height: 400,
+        child: Form(
+          key: _form,
+          child: ListView(
+            children: <Widget>[
+              _buildTitleTextField(),
+              _buildSubjectTextField(),
+              _buildLocationTextField(),
+              _buildDateTimePicker(),
+              _buildDescriptionTextField(),
+              RaisedButton(
+                child: Text("submit"),
+                color: Colors.deepPurple,
+                onPressed: () {
+                  _saveForm();
+                Navigator.pop(context);
+                },
+                focusNode: _subjectFocusNode,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -77,13 +122,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     final isValid = _form.currentState.validate();
     if (!isValid) return;
     _form.currentState.save();
-    Provider.of<StudyGroups>(context, listen: false)
-        .addSudyGroup(_editedStudyGroup);
-    print("title " + _editedStudyGroup.title);
-    print("s " + _editedStudyGroup.subject);
-    print("l " + _editedStudyGroup.location);
-    print("d " + _editedStudyGroup.dateTime.toString());
-    print("desc " + _editedStudyGroup.description);
+    if (widget.groupId == null)
+      Provider.of<StudyGroups>(context, listen: false)
+          .updateStudyGroup(widget.groupId, _editedStudyGroup);
+    else
+      Provider.of<StudyGroups>(context, listen: false)
+          .addSudyGroup(_editedStudyGroup);
+
+    // print("title " + _editedStudyGroup.title);
+    // print("s " + _editedStudyGroup.subject);
+    // print("l " + _editedStudyGroup.location);
+    // print("d " + _editedStudyGroup.dateTime.toString());
+    // print("desc " + _editedStudyGroup.description);
   }
 
   Widget _buildTitleTextField() {
@@ -96,6 +146,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         else
           return null;
       },
+      initialValue: _initValues['title'],
       onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(_subjectFocusNode);
       },
@@ -110,6 +161,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Subject'),
       textInputAction: TextInputAction.next,
       focusNode: _subjectFocusNode,
+      initialValue: _initValues['subject'],
       validator: (value) {
         if (value.isEmpty)
           return "Please enter a subject.";
@@ -130,6 +182,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Location'),
       textInputAction: TextInputAction.next,
       focusNode: _locationFocusNode,
+      initialValue: _initValues['location'],
       validator: (value) {
         if (value.isEmpty)
           return "Please enter a location.";
@@ -157,7 +210,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             child: TextFormField(
               decoration: InputDecoration(labelText: 'Date'),
               textInputAction: TextInputAction.next,
-              controller: dateText,
+              controller: dateTextController,
               readOnly: true,
               focusNode: _dateFocusNode,
               validator: (value) {
@@ -201,12 +254,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 if (selectedTime.hour < currentTime.hour ||
                     (selectedTime.hour == currentTime.hour &&
                         selectedTime.minute < currentTime.minute))
-                  return "Please enter a valid date.";
+                  return "Please enter a valid time.";
                 else
                   return null;
               },
               readOnly: true,
-              controller: timeText,
+              controller: timeTextController,
               onFieldSubmitted: (_) {
                 FocusScope.of(context).requestFocus(_descriptionFocusNode);
               },
@@ -237,6 +290,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       decoration: InputDecoration(labelText: 'Description'),
       focusNode: _descriptionFocusNode,
       keyboardType: TextInputType.multiline,
+      initialValue: _initValues['description'],
       inputFormatters: [
         LengthLimitingTextInputFormatter(300),
       ],
@@ -256,7 +310,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         lastDate: new DateTime(2101));
     if (picked != null)
       setState(() {
-        dateText.text = new DateFormat.yMMMd().format(picked);
+        dateTextController.text = new DateFormat.yMMMd().format(picked);
         selectedDate = picked;
       });
   }
@@ -266,7 +320,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         await showTimePicker(context: context, initialTime: selectedTime);
     if (picked != null)
       setState(() {
-        timeText.text = picked.format(context);
+        timeTextController.text = picked.format(context);
         selectedTime = picked;
       });
   }

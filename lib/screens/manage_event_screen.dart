@@ -19,7 +19,7 @@ class ManageEventScreen extends StatelessWidget {
       ),
       body: Container(
         //padding: EdgeInsets.all(10),
-        color: Colors.grey,
+        color: Colors.grey[400],
         child: ListView.builder(
           itemCount: studyGroups.length,
           itemBuilder: (_, i) => Column(
@@ -39,10 +39,10 @@ class ManageEventScreen extends StatelessWidget {
           showDialog(
             context: context,
             builder: (BuildContext context) =>
-                AlertDialog(content: CreateEventScreen()),
+                CreateEventScreen(),
           );
+          //Navigator.of(context).pushReplacementNamed(CreateEventScreen.routeName);
         },
-        // Navigator.of(context).pushReplacementNamed(CreateEventScreen.routeName);
       ),
     );
   }
