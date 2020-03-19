@@ -38,8 +38,8 @@ class HomePageScreen extends StatelessWidget {
           List<StudyGroup> groups = [];
 
           docs.forEach((item) {
-            debugPrint('item $item'); // TODO don't hardcode DateTime
-            groups.add(StudyGroup.explicit(item.data['id'], item.data['title'], item.data['subject'], item.data['description'], DateTime(9999, 9, 99, 9, 9), item.data['location']));
+            DateTime time = DateTime.parse(item.data['dateTime']);
+            groups.add(StudyGroup.explicit(item.data['id'], item.data['title'], item.data['subject'], item.data['description'], time, item.data['location']));
           }); // TODO
           return ListView.builder(
               padding: const EdgeInsets.all(10.0),
