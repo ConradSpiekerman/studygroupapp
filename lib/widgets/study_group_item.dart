@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 // import 'dart:math';
 // import 'package:intl/intl.dart';
 
 import '../models/study_group.dart';
+import '../providers/study_groups.dart';
 
 class StudyGroupItem extends StatelessWidget {
   final StudyGroup studyGroup;
@@ -79,9 +82,18 @@ class StudyGroupItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                  OutlineButton(
-                    onPressed: () {},
-                    child: Text('RVSP'),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    width: 40,
+                    height: 40,
+                    child: FlatButton(
+                      color: Colors.deepPurple,
+                      child: Text('RVSP',
+                      style: TextStyle(color: Colors.white70),),
+                      onPressed: () {
+                         Provider.of<StudyGroups>(context, listen: false).saveEvent(studyGroup.id);
+                      },
+                    ),
                   )
                   ],
                 ),

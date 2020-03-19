@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:study_group_app/models/study_group.dart';
-import '../screens/create_event_screen.dart';
 
-class UserEventItem extends StatelessWidget {
+class SavedEventItem extends StatelessWidget {
   final StudyGroup _studyGroup;
-  UserEventItem(this._studyGroup);
+  SavedEventItem(this._studyGroup);
 
   @override
   Widget build(BuildContext context) {
@@ -22,26 +21,12 @@ class UserEventItem extends StatelessWidget {
               ),
             ),
             trailing: Container(
-              width: 100,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                             CreateEventScreen(groupId: _studyGroup.id),
-                      );
-                    },
-                    color: Colors.deepPurple,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {},
-                    color: Colors.purple,
-                  ),
-                ],
+             width: 30,
+             alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {},
+                color: Colors.purple,
               ),
             ),
           ),

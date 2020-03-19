@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import './screens/home_page_screen.dart';
 import './screens/manage_event_screen.dart';
-import './screens/user_events_screen.dart';
+import './screens/saved_events_screen.dart';
 import './providers/study_groups.dart';
 import './screens/create_event_screen.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         home: HomePageScreen(),
         routes: {
           ManageEventScreen.routeName: (ctx) => ManageEventScreen(),
-          UserEventsScreen.routeName: (ctx) => UserEventsScreen(),
+          SavedEventsScreen.routeName: (ctx) => SavedEventsScreen(),
           CreateEventScreen.routeName: (ctx) => CreateEventScreen(),
         },
       ),

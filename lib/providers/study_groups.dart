@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class StudyGroups with ChangeNotifier {
   Map<String, StudyGroup> _map = {};
   var lastId = 6;
+  List<int> _savedEvents = [];
 
   StudyGroups() {
     print("Study Groups");
@@ -53,13 +54,14 @@ class StudyGroups with ChangeNotifier {
       location: 'CSE2 Lab 124',
     ),
     StudyGroup(
-      id: 5,
+      id: 9,
       title: 'CSE344 Final Prepration',
       subject: 'CSE344',
       dateTime: DateTime(2020, 2, 10, 2, 45),
       description: 'Let\'s get together and prepare for the Final!',
       location: 'CSE2 Lab 110',
     ),
+    
   ];
 
   Set<String> _filteredSubjects = {};
@@ -109,8 +111,13 @@ class StudyGroups with ChangeNotifier {
   }
 
   StudyGroup findById(int id) {
+    try {
     StudyGroup item = _items.singleWhere((item) => item.id == id);
     return _copyStudyGroup(item);
+    }on StateError{
+      print("No item found with the provided id");
+      return null; 
+    }
   }
 
   Map<String, StudyGroup> get map {
@@ -131,6 +138,15 @@ class StudyGroups with ChangeNotifier {
       _items[index] = _copyStudyGroup(newStudyGroup);
       notifyListeners();
     }
+  }
+
+  void saveEvent(int id) {
+    _savedEvents.add(id);
+    notifyListeners();
+  }
+
+  List<StudyGroup> getSavedEvents() {
+     return _savedEvents.map((id) => findById(id)).toList();
   }
 
   StudyGroup _copyStudyGroup(StudyGroup studyGroup) {

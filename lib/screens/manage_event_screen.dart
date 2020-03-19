@@ -18,7 +18,6 @@ class ManageEventScreen extends StatelessWidget {
         title: Text('Manage Events'),
       ),
       body: Container(
-        //padding: EdgeInsets.all(10),
         color: Colors.grey[400],
         child: ListView.builder(
           itemCount: studyGroups.length,
@@ -41,7 +40,6 @@ class ManageEventScreen extends StatelessWidget {
             builder: (BuildContext context) =>
                 CreateEventScreen(),
           );
-          //Navigator.of(context).pushReplacementNamed(CreateEventScreen.routeName);
         },
       ),
     );

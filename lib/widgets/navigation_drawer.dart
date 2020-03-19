@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:study_group_app/screens/manage_event_screen.dart';
 
 import '../screens/manage_event_screen.dart';
-import '../screens/user_events_screen.dart';
+import '../screens/saved_events_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
   @override
@@ -36,10 +36,10 @@ class NavigationDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.event),
-            title: Text('Your Events'),
+            title: Text('Saved Events'),
             onTap: () {
               Navigator.of(context)
-                  .pushReplacementNamed(UserEventsScreen.routeName);
+                  .pushReplacementNamed(SavedEventsScreen.routeName);
             },
           ),
           Divider(),
