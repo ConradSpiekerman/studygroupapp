@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StudyGroups with ChangeNotifier {
   CollectionReference _groupDocRef;
-  Set<String> _subjects = {};
+  Map<String, int> _subjects = {};
   SharedPreferences prefs;
   var lastId;
   Set<int> _savedEvents = {};
@@ -90,14 +90,13 @@ class StudyGroups with ChangeNotifier {
   }
 
   void removeSubject(String subject) {
-    if(_filteredSubjects.isEmpty)
-      _isFiltered = false; 
+    if (_filteredSubjects.isEmpty) _isFiltered = false;
     _filteredSubjects.remove(subject);
     notifyListeners();
   }
 
   void addSubject(String subject) {
-     _isFiltered = true;
+    _isFiltered = true;
     _filteredSubjects.add(subject);
     notifyListeners();
   }
@@ -105,7 +104,7 @@ class StudyGroups with ChangeNotifier {
   bool isSubjectFiltered(String subject) {
     return _filteredSubjects.contains(subject);
   }
-  
+
   bool isFiltered() {
     return _isFiltered;
   }
@@ -118,7 +117,7 @@ class StudyGroups with ChangeNotifier {
 
   void clearFilters() {
     _filteredDate = null;
-     _isFiltered = false;
+    _isFiltered = false;
     _filteredSubjects.clear();
     notifyListeners();
   }
@@ -135,7 +134,7 @@ class StudyGroups with ChangeNotifier {
 
   Set<String> get getSubjects {
     Set<String> copy = new Set<String>();
-    copy.addAll(_subjects);
+    copy.addAll(_subjects.keys);
     return copy;
   }
 
@@ -161,7 +160,23 @@ class StudyGroups with ChangeNotifier {
   }
 
   void updateEvent(int id, StudyGroup newStudyGroup) {
-    final index = _groups.indexWhere((item) => item.id == id);
+    final index = _groups.indexWhere((item) {
+      var found = false;
+      if (item.id == id) {
+        if (_subjects.containsKey(item.subject)) {
+          if (_subjects[item.subject] == 1) {
+            _subjects.remove(item.subject);
+          }
+          if (_subjects.containsKey(newStudyGroup.subject)) {
+            _subjects[newStudyGroup.subject] += 1;
+          } else {
+            _subjects[newStudyGroup.subject] = 1;
+          }
+        }
+        found = true;
+      }
+      return found;
+    });
     if (index >= 0) {
       _groups[index] = _copyStudyGroup(newStudyGroup);
 
@@ -181,7 +196,19 @@ class StudyGroups with ChangeNotifier {
   }
 
   void deleteEvent(int id) {
-    _groups.removeWhere((item) => item.id == id);
+    _groups.removeWhere((item) {
+      var found = false;
+      if (item.id == id) {
+        if (_subjects.containsKey(item.subject)) {
+          _subjects[item.subject] -= 1;
+          if (_subjects[item.subject] == 0){
+           _subjects.remove(item.subject);
+          }
+        }
+        found = true;
+      }
+      return found;
+    });
 
     // delete document on server
     Firestore.instance.collection('groups').document(id.toString()).delete();
@@ -192,10 +219,10 @@ class StudyGroups with ChangeNotifier {
   void deleteSavedEvent(int deleteId) {
     _savedEvents.removeWhere((id) => id == deleteId);
 
-      List<String> stringList = [];  // delete from list on disk
-      _savedEvents.forEach((elt) {
-        stringList.add(elt.toString());
-      });
+    List<String> stringList = []; // delete from list on disk
+    _savedEvents.forEach((elt) {
+      stringList.add(elt.toString());
+    });
 
     prefs.setStringList('savedEvents', stringList);
     notifyListeners();
@@ -217,7 +244,7 @@ class StudyGroups with ChangeNotifier {
   List<StudyGroup> getSavedEvents() {
     List<StudyGroup> temp = _savedEvents.map((id) => findById(id)).toList();
     temp.remove(null);
-    return temp;  // fix because there's some weird stuff with the savedEvents
+    return temp; // fix because there's some weird stuff with the savedEvents
     // I think it's fixed now but keeping this just in case
     //return _savedEvents.map((id) => findById(id)).toList();
   }
@@ -274,7 +301,15 @@ class StudyGroups with ChangeNotifier {
       });
       _groups.clear();
       _groups.addAll(groups);
-      _groups.forEach((item) => {_subjects.add(item.subject)});
+      _subjects.clear();
+      _groups.forEach((item) {
+        if (_subjects.containsKey(item.subject)) {
+          _subjects[item.subject] += 1;
+        } else {
+          _subjects[item.subject] = 1;
+        }
+      });
+
       notifyListeners();
     } catch (error) {
       print("Error while fetching data!");
