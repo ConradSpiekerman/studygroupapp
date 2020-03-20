@@ -3,22 +3,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/study_group.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudyGroups with ChangeNotifier {
+  //Stream<QuerySnapshot> documents = Firestore.instance.collection('groups').snapshots();
   Map<String, StudyGroup> _map = {};
-  var lastId = 6;
+  SharedPreferences prefs;
+  var lastId;
   List<int> _savedEvents = [];
 
   StudyGroups() {
     print("Study Groups");
     _items.forEach((item) => {_map[item.subject] = item});
     print(_map.length);
+    init();
   }
 
   // Dummy Data
   List<StudyGroup> _items = [
-    StudyGroup(
+
+
+    /*StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
       subject: 'CSE461',
@@ -61,7 +66,7 @@ class StudyGroups with ChangeNotifier {
       dateTime: DateTime(2020, 2, 10, 2, 45),
       description: 'Let\'s get together and prepare for the Final!',
       location: 'CSE2 Lab 110',
-    ),
+    ),*/
   ];
 
   Set<String> _filteredSubjects = {};
@@ -75,6 +80,10 @@ class StudyGroups with ChangeNotifier {
             _filteredSubjects.contains(item.subject) &&
             _isAtTheSameDate(item.dateTime))
         .toList();
+  }
+
+  set items(List<StudyGroup> newList) {
+    _items = newList;
   }
 
   bool _isAtTheSameDate(date) {
@@ -128,6 +137,8 @@ class StudyGroups with ChangeNotifier {
   void addEvent(StudyGroup studyGroup) {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
     newGroup.id = lastId++;
+    prefs.setInt('lastId', lastId);  // write to disk
+
     _items.insert(0, newGroup);
 
     debugPrint('addStudyGroup');
@@ -170,12 +181,30 @@ class StudyGroups with ChangeNotifier {
   }
 
   void deleteSavedEvent(int deleteId) {
-    _savedEvents.removeWhere((id) => id == deleteId);
-    notifyListeners();
+    final index = _savedEvents.indexWhere((id) => id == deleteId);
+    if (index >= 0) {
+      _savedEvents.removeAt(index);
+
+      List<String> stringList;  // delete from list on disk
+      _savedEvents.forEach((elt) {
+        stringList.add(elt.toString());
+      });
+
+      prefs.setStringList('savedEvents', stringList);
+      notifyListeners();
+    }
   }
 
   void saveEvent(int id) {
     _savedEvents.add(id);
+
+    List<String> stringList = [];
+
+    _savedEvents.forEach((elt) {
+      stringList.add(elt.toString());
+    });
+
+    prefs.setStringList('savedEvents', stringList);
     notifyListeners();
   }
 
@@ -191,5 +220,29 @@ class StudyGroups with ChangeNotifier {
         location: studyGroup.location,
         dateTime: studyGroup.dateTime,
         description: studyGroup.description);
+  }
+
+
+  void init() async {  // get last sequence number from disk
+    prefs = await SharedPreferences.getInstance();
+    lastId = prefs.getInt('lastId');
+    List<String> stringList = prefs.getStringList('savedEvents');  // initialize saved
+    // events from disk
+    if (stringList != null) {
+      stringList.forEach((elt) {
+        _savedEvents.add(int.parse(elt));
+      });
+    } else {
+      _savedEvents = [];
+    }
+
+    debugPrint('savedEvents on disk: $_savedEvents');
+
+    // initialize the sequence number to use for id's
+    if (lastId == null) {
+      lastId = 0;
+    } else {
+      lastId = lastId + 2;  // skip 2 id's for safety
+    }
   }
 }

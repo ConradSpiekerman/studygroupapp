@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/study_group_item.dart';
 import '../models/study_group.dart';
 
+import 'package:provider/provider.dart';
+import '../providers/study_groups.dart';
+
 
 class HomePageScreen extends StatelessWidget {
   final Set<String> filteredSet = {};
@@ -40,7 +43,9 @@ class HomePageScreen extends StatelessWidget {
           docs.forEach((item) {
             DateTime time = DateTime.parse(item.data['dateTime']);
             groups.add(StudyGroup.explicit(item.data['id'], item.data['title'], item.data['subject'], item.data['description'], time, item.data['location']));
-          }); // TODO
+          });
+          Provider.of<StudyGroups>(context).items = groups;  // update _items
+
           return ListView.builder(
               padding: const EdgeInsets.all(10.0),
               itemCount: groups.length,
