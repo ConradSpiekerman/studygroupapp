@@ -177,6 +177,11 @@ class StudyGroups with ChangeNotifier {
 
   void deleteEvent(int id) {
     _items.removeWhere((item) => item.id == id);
+
+    // TODO probably delete from savedEvents if it's there
+
+    // delete document on server
+    Firestore.instance.collection('groups').document(id.toString()).delete();
     notifyListeners();
   }
 
