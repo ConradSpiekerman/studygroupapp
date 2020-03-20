@@ -8,7 +8,6 @@ import '../screens/saved_events_screen.dart';
 class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("Drawer");
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
