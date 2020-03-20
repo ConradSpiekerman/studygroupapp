@@ -159,25 +159,19 @@ class StudyGroups with ChangeNotifier {
       doc['description'] = _items[index].description;
       doc['location'] = _items[index].location;
       ref.document(_items[index].id.toString()).setData(doc);
-
+      
       notifyListeners();
     }
   }
 
   void deleteEvent(int id) {
-    final index = _items.indexWhere((item) => item.id == id);
-    if (index >= 0) {
-      _items.removeAt(index);
-      notifyListeners();
-    }
+    _items.removeWhere((item) => item.id == id);
+    notifyListeners();
   }
 
   void deleteSavedEvent(int deleteId) {
-    final index = _savedEvents.indexWhere((id) => id == deleteId);
-    if (index >= 0) {
-      _savedEvents.removeAt(index);
-      notifyListeners();
-    }
+    _savedEvents.removeWhere((id) => id == deleteId);
+    notifyListeners();
   }
 
   void saveEvent(int id) {
