@@ -11,7 +11,7 @@ class ManageEventScreen extends StatelessWidget {
   static const routeName = '/manage_event';
   @override
   Widget build(BuildContext context) {
-    final studyGroups = Provider.of<StudyGroups>(context).items;
+    final studyGroups = Provider.of<StudyGroups>(context).groups;
     return Scaffold(
       drawer: NavigationDrawer(),
       appBar: AppBar(

@@ -7,11 +7,6 @@ import '../providers/study_groups.dart';
 import './filter_study_group_chip.dart';
 
 class FilterDrawer extends StatefulWidget {
-  final Set<String> filteredSubjects = {};
-
-  FilterDrawer(Set<String> set) {
-    this.filteredSubjects.addAll(set);
-  }
 
   @override
   _FilterDrawerState createState() => _FilterDrawerState();
@@ -22,13 +17,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final studyGroupContainer =
-        Provider.of<StudyGroups>(context, listen: false);
-    print("Drawer");
-    final subjects = Provider.of<StudyGroups>(context).map.keys;
-    List<FilterChipWidget> list = subjects
+    final studyGroupContainer = Provider.of<StudyGroups>(context, listen: false);
+    final subjects = Provider.of<StudyGroups>(context).getSubjects;
+    List<FilterChipWidget> subjectsList = subjects
         .map((name) => FilterChipWidget(
-            chipName: name, isSelected: studyGroupContainer.isFiltered(name)))
+            chipName: name, isSelected: studyGroupContainer.isSubjectFiltered(name)))
         .toList();
     return Drawer(
       child: Column(
@@ -54,7 +47,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Wrap(
-              children: list,
+              children: subjectsList,
             ),
           ),
           Divider(),

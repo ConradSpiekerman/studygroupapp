@@ -6,23 +6,19 @@ import '../models/study_group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StudyGroups with ChangeNotifier {
-  //Stream<QuerySnapshot> documents = Firestore.instance.collection('groups').snapshots();
-  Map<String, StudyGroup> _map = {};
+  CollectionReference _groupDocRef;
+  Set<String> _subjects = {};
   SharedPreferences prefs;
   var lastId;
-  List<int> _savedEvents = [];
+  Set<int> _savedEvents = {};
+  bool _isFiltered = false;
 
   StudyGroups() {
-    print("Study Groups");
-    _items.forEach((item) => {_map[item.subject] = item});
-    print(_map.length);
     init();
   }
 
   // Dummy Data
-  List<StudyGroup> _items = [
-
-
+  List<StudyGroup> _groups = [
     /*StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
@@ -72,18 +68,18 @@ class StudyGroups with ChangeNotifier {
   Set<String> _filteredSubjects = {};
   DateTime _filteredDate;
 
-  List<StudyGroup> get items {
+  List<StudyGroup> get filteredGroups {
     if (_filteredSubjects.isEmpty)
-      return _items.where((item) => _isAtTheSameDate(item.dateTime)).toList();
-    return _items
+      return _groups.where((item) => _isAtTheSameDate(item.dateTime)).toList();
+    return _groups
         .where((item) =>
             _filteredSubjects.contains(item.subject) &&
             _isAtTheSameDate(item.dateTime))
         .toList();
   }
 
-  set items(List<StudyGroup> newList) {
-    _items = newList;
+  List<StudyGroup> get groups {
+    return [..._groups];
   }
 
   bool _isAtTheSameDate(date) {
@@ -94,34 +90,42 @@ class StudyGroups with ChangeNotifier {
   }
 
   void removeSubject(String subject) {
+    if(_filteredSubjects.isEmpty)
+      _isFiltered = false; 
     _filteredSubjects.remove(subject);
     notifyListeners();
   }
 
   void addSubject(String subject) {
+     _isFiltered = true;
     _filteredSubjects.add(subject);
     notifyListeners();
   }
 
-  bool isFiltered(String subject) {
+  bool isSubjectFiltered(String subject) {
     return _filteredSubjects.contains(subject);
+  }
+  
+  bool isFiltered() {
+    return _isFiltered;
   }
 
   void filteredDate(DateTime date) {
-    print(date);
+    _isFiltered = true;
     this._filteredDate = date;
     notifyListeners();
   }
 
   void clearFilters() {
     _filteredDate = null;
+     _isFiltered = false;
     _filteredSubjects.clear();
     notifyListeners();
   }
 
   StudyGroup findById(int id) {
     try {
-      StudyGroup item = _items.singleWhere((item) => item.id == id);
+      StudyGroup item = _groups.singleWhere((item) => item.id == id);
       return _copyStudyGroup(item);
     } on StateError {
       print("No item found with the provided id");
@@ -129,17 +133,18 @@ class StudyGroups with ChangeNotifier {
     }
   }
 
-  Map<String, StudyGroup> get map {
-    // TODO: Do a deep copy
-    return _map;
+  Set<String> get getSubjects {
+    Set<String> copy = new Set<String>();
+    copy.addAll(_subjects);
+    return copy;
   }
 
   void addEvent(StudyGroup studyGroup) {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
     newGroup.id = lastId++;
-    prefs.setInt('lastId', lastId);  // write to disk
+    prefs.setInt('lastId', lastId); // write to disk
 
-    _items.insert(0, newGroup);
+    _groups.insert(0, newGroup);
 
     debugPrint('addStudyGroup');
     CollectionReference ref = Firestore.instance.collection('groups');
@@ -156,43 +161,40 @@ class StudyGroups with ChangeNotifier {
   }
 
   void updateEvent(int id, StudyGroup newStudyGroup) {
-    final index = _items.indexWhere((item) => item.id == id);
+    final index = _groups.indexWhere((item) => item.id == id);
     if (index >= 0) {
-      _items[index] = _copyStudyGroup(newStudyGroup);
+      _groups[index] = _copyStudyGroup(newStudyGroup);
 
       debugPrint('updateStudyGroup');
       CollectionReference ref = Firestore.instance.collection('groups');
       Map<String, dynamic> doc = new Map();
-      doc['id'] = _items[index].id;
-      doc['title'] = _items[index].title;
-      doc['subject'] = _items[index].subject;
-      doc['dateTime'] = _items[index].dateTime.toIso8601String();
-      doc['description'] = _items[index].description;
-      doc['location'] = _items[index].location;
-      ref.document(_items[index].id.toString()).setData(doc);
-      
+      doc['id'] = _groups[index].id;
+      doc['title'] = _groups[index].title;
+      doc['subject'] = _groups[index].subject;
+      doc['dateTime'] = _groups[index].dateTime.toIso8601String();
+      doc['description'] = _groups[index].description;
+      doc['location'] = _groups[index].location;
+      ref.document(_groups[index].id.toString()).setData(doc);
+
       notifyListeners();
     }
   }
 
   void deleteEvent(int id) {
-    _items.removeWhere((item) => item.id == id);
+    _groups.removeWhere((item) => item.id == id);
     notifyListeners();
   }
 
   void deleteSavedEvent(int deleteId) {
-    final index = _savedEvents.indexWhere((id) => id == deleteId);
-    if (index >= 0) {
-      _savedEvents.removeAt(index);
+    _savedEvents.removeWhere((id) => id == deleteId);
 
-      List<String> stringList;  // delete from list on disk
-      _savedEvents.forEach((elt) {
-        stringList.add(elt.toString());
-      });
+    List<String> stringList = []; // delete from list on disk
+    _savedEvents.forEach((elt) {
+      stringList.add(elt.toString());
+    });
 
-      prefs.setStringList('savedEvents', stringList);
-      notifyListeners();
-    }
+    prefs.setStringList('savedEvents', stringList);
+    notifyListeners();
   }
 
   void saveEvent(int id) {
@@ -203,8 +205,8 @@ class StudyGroups with ChangeNotifier {
     _savedEvents.forEach((elt) {
       stringList.add(elt.toString());
     });
-
     prefs.setStringList('savedEvents', stringList);
+
     notifyListeners();
   }
 
@@ -222,18 +224,19 @@ class StudyGroups with ChangeNotifier {
         description: studyGroup.description);
   }
 
-
-  void init() async {  // get last sequence number from disk
+  void init() async {
+    // get last sequence number from disk
     prefs = await SharedPreferences.getInstance();
     lastId = prefs.getInt('lastId');
-    List<String> stringList = prefs.getStringList('savedEvents');  // initialize saved
+    List<String> stringList =
+        prefs.getStringList('savedEvents'); // initialize saved
     // events from disk
     if (stringList != null) {
       stringList.forEach((elt) {
         _savedEvents.add(int.parse(elt));
       });
     } else {
-      _savedEvents = [];
+      _savedEvents = {};
     }
 
     debugPrint('savedEvents on disk: $_savedEvents');
@@ -242,7 +245,32 @@ class StudyGroups with ChangeNotifier {
     if (lastId == null) {
       lastId = 0;
     } else {
-      lastId = lastId + 2;  // skip 2 id's for safety
+      lastId = lastId + 2; // skip 2 id's for safety
+    }
+  }
+
+  Future<void> fetchGroups() async {
+    try {
+      _groupDocRef = Firestore.instance.collection('groups');
+      final snapshots = await _groupDocRef.getDocuments();
+      List<StudyGroup> groups = [];
+      snapshots.documents.forEach((doc) {
+        DateTime time = DateTime.parse(doc.data['dateTime']);
+        groups.add(StudyGroup.explicit(
+            doc.data['id'],
+            doc.data['title'],
+            doc.data['subject'],
+            doc.data['description'],
+            time,
+            doc.data['location']));
+      });
+      _groups.clear();
+      _groups.addAll(groups);
+      _groups.forEach((item) => {_subjects.add(item.subject)});
+      notifyListeners();
+    } catch (error) {
+      print("Error while fetching data!");
+      throw error;
     }
   }
 }
