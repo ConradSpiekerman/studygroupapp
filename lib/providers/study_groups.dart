@@ -178,10 +178,9 @@ class StudyGroups with ChangeNotifier {
   void deleteEvent(int id) {
     _items.removeWhere((item) => item.id == id);
 
-    // TODO probably delete from savedEvents if it's there
-
     // delete document on server
     Firestore.instance.collection('groups').document(id.toString()).delete();
+    deleteSavedEvent(id);
     notifyListeners();
   }
 
@@ -190,7 +189,7 @@ class StudyGroups with ChangeNotifier {
     if (index >= 0) {
       _savedEvents.removeAt(index);
 
-      List<String> stringList;  // delete from list on disk
+      List<String> stringList = [];  // delete from list on disk
       _savedEvents.forEach((elt) {
         stringList.add(elt.toString());
       });
@@ -214,7 +213,11 @@ class StudyGroups with ChangeNotifier {
   }
 
   List<StudyGroup> getSavedEvents() {
-    return _savedEvents.map((id) => findById(id)).toList();
+    List<StudyGroup> temp = _savedEvents.map((id) => findById(id)).toList();
+    temp.remove(null);
+    return temp;  // fix because there's some weird stuff with the savedEvents
+    // I think it's fixed now but keeping this just in case
+    //return _savedEvents.map((id) => findById(id)).toList();
   }
 
   StudyGroup _copyStudyGroup(StudyGroup studyGroup) {
