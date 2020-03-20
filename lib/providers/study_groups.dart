@@ -6,6 +6,7 @@ import '../models/study_group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StudyGroups with ChangeNotifier {
+  //Stream<QuerySnapshot> documents = Firestore.instance.collection('groups').snapshots();
   Map<String, StudyGroup> _map = {};
   SharedPreferences prefs;
   var lastId;
@@ -20,6 +21,8 @@ class StudyGroups with ChangeNotifier {
 
   // Dummy Data
   List<StudyGroup> _items = [
+
+
     /*StudyGroup(
       id: 1,
       title: 'CSE461 Midterm Study',
@@ -77,6 +80,10 @@ class StudyGroups with ChangeNotifier {
             _filteredSubjects.contains(item.subject) &&
             _isAtTheSameDate(item.dateTime))
         .toList();
+  }
+
+  set items(List<StudyGroup> newList) {
+    _items = newList;
   }
 
   bool _isAtTheSameDate(date) {
