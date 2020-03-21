@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:study_group_app/screens/account_screen.dart';
 import 'package:study_group_app/screens/manage_event_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../screens/manage_event_screen.dart';
 import '../screens/saved_events_screen.dart';
-import '../main.dart';
-
 
 class NavigationDrawer extends StatelessWidget {
-//  final GoogleSignIn googleSignIn;
-//  NavigationDrawer({this.googleSignIn});
-
 
   Future<void> _signOut(context) async {
     try {
-      Navigator.of(context)
-          .pushReplacementNamed('/');
-      googleSignIn.signOut();
-      googleSignIn.signIn();
+      Navigator.of(context).pushReplacementNamed('/');
+      await FirebaseAuth.instance.signOut();
     } catch (e) {
       print(e); // TODO: show dialog with error
     }
@@ -63,15 +54,6 @@ class NavigationDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Current User', style: TextStyle(fontSize: 18)),
-              onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(AccountScreen.routeName);
-              }
-          ),
-          Divider(),
-          ListTile(
             leading: RotationTransition(
               turns: new AlwaysStoppedAnimation(180 / 360),
               child: Icon(
@@ -81,7 +63,6 @@ class NavigationDrawer extends StatelessWidget {
             title: Text('Log out', style: TextStyle(fontSize: 18)),
             onTap: () =>_signOut(context),
           ),
-
         ],
       ),
     );
