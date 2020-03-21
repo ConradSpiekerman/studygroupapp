@@ -20,7 +20,7 @@ class SavedEventsScreen extends StatelessWidget {
           children: <Widget>[
             SavedEventItem(savedEvents[i]),
             Divider(
-              color: Colors.deepPurple,
+              color: Theme.of(context).accentColor,
             ),
           ],
         ),
@@ -35,7 +35,7 @@ class SavedEventsScreen extends StatelessWidget {
           title: Text('Saved Events'),
         ),
         drawer: NavigationDrawer(),
-        backgroundColor: Colors.grey[400],
+        backgroundColor: Color(0xFFf5f5f5),
         body: child);
   }
 }

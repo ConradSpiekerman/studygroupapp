@@ -15,12 +15,12 @@ class StudyGroupItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        color: Colors.grey,
+        color: Color(0xFFf5f5f5),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                color: Colors.white70,
+                color: Color(0xFFcec7d6),
                 height: 40,
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -42,7 +42,7 @@ class StudyGroupItem extends StatelessWidget {
                           margin: EdgeInsets.only(right: 8, bottom: 4),
                           child: Icon(
                             Icons.subject,
-                            color: Colors.purple,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Text(
@@ -59,7 +59,7 @@ class StudyGroupItem extends StatelessWidget {
                           margin: EdgeInsets.only(right: 8,  bottom: 4),
                           child: Icon(
                             Icons.access_time,
-                            color: Colors.purple,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Text(
@@ -76,7 +76,7 @@ class StudyGroupItem extends StatelessWidget {
                           margin: EdgeInsets.only(right: 8,  bottom: 4),
                           child: Icon(
                             Icons.location_on,
-                            color: Colors.purple,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Text(
@@ -93,7 +93,7 @@ class StudyGroupItem extends StatelessWidget {
                           margin: EdgeInsets.only(right: 8,  bottom: 4),
                           child: Icon(
                             Icons.event_note,
-                            color: Colors.purple,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Expanded(
@@ -111,10 +111,10 @@ class StudyGroupItem extends StatelessWidget {
                       width: 40,
                       height: 40,
                       child: FlatButton(
-                        color: Colors.deepPurple,
+                        color: Theme.of(context).accentColor,
                         child: Text(
                           'RVSP',
-                          style: TextStyle(color: Colors.white70),
+                          style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
                           Provider.of<StudyGroups>(context, listen: false)

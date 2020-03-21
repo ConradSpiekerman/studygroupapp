@@ -18,7 +18,11 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Study Group Planner', 
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+        ),
         actions: [
           // change the endDrawer default icon to filter icon
           Builder(
@@ -30,6 +34,7 @@ class HomePageScreen extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: Colors.grey,
       body: FutureBuilder(
         future: Provider.of<StudyGroups>(context, listen: false).fetchGroups(),
         builder: (context, AsyncSnapshot snapshot) {

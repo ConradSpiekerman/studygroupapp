@@ -18,21 +18,21 @@ class ManageEventScreen extends StatelessWidget {
         title: Text('Manage Events'),
       ),
       body: Container(
-        color: Colors.grey[400],
+        color: Color(0xFFf5f5f5),
         child: ListView.builder(
           itemCount: studyGroups.length,
           itemBuilder: (_, i) => Column(
             children: <Widget>[
               UserEventItem(studyGroups[i]),
               Divider(
-                color: Colors.deepPurple,
+                color: Theme.of(context).accentColor,
               ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).accentColor,
         child: Icon(Icons.add),
         onPressed: () {
           showDialog(
