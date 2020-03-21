@@ -20,7 +20,7 @@ class SavedEventItem extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: Colors.deepPurple[400],
+                color: Theme.of(context).accentColor,
               ),
             ),
             trailing: Container(
@@ -35,7 +35,7 @@ class SavedEventItem extends StatelessWidget {
                         DeleteEventScreen(_studyGroup.id, true),
                   );
                 },
-                color: Colors.purple,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -51,7 +51,7 @@ class SavedEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.subject,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -68,7 +68,7 @@ class SavedEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.access_time,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -85,7 +85,7 @@ class SavedEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.location_on,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -102,7 +102,7 @@ class SavedEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.event_note,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Expanded(

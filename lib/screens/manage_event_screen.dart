@@ -25,14 +25,14 @@ class ManageEventScreen extends StatelessWidget {
             children: <Widget>[
               UserEventItem(studyGroups[i]),
               Divider(
-                color: Colors.deepPurple,
+                color: Theme.of(context).accentColor,
               ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).accentColor,
         child: Icon(Icons.add),
         onPressed: () {
           showDialog(

@@ -21,7 +21,7 @@ class UserEventItem extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: Colors.deepPurple[400],
+                color: Theme.of(context).accentColor,
               ),
             ),
             trailing: Container(
@@ -37,7 +37,7 @@ class UserEventItem extends StatelessWidget {
                             CreateEventScreen(groupId: _studyGroup.id),
                       );
                     },
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).accentColor,
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
@@ -48,7 +48,7 @@ class UserEventItem extends StatelessWidget {
                             DeleteEventScreen(_studyGroup.id, false),
                       );
                     },
-                    color: Colors.purple,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),
@@ -66,7 +66,7 @@ class UserEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.subject,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -83,7 +83,7 @@ class UserEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.access_time,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -100,7 +100,7 @@ class UserEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.location_on,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
@@ -117,7 +117,7 @@ class UserEventItem extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8, bottom: 4),
                     child: Icon(
                       Icons.event_note,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Expanded(

@@ -14,11 +14,11 @@ class NavigationDrawer extends StatelessWidget {
         children: <Widget>[
           Container(
             height: 90,
-            color: Colors.purple,
+            color: Theme.of(context).primaryColor,
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('Home', style: TextStyle(fontSize: 18)),
             onTap: () {
               Navigator.of(context).pushReplacementNamed('/');
             },
@@ -26,7 +26,7 @@ class NavigationDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.edit),
-            title: Text('Manage Events'),
+            title: Text('Manage Events', style: TextStyle(fontSize: 18)),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(ManageEventScreen.routeName);
@@ -35,7 +35,7 @@ class NavigationDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.event),
-            title: Text('Saved Events'),
+            title: Text('Saved Events', style: TextStyle(fontSize: 18)),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(SavedEventsScreen.routeName);
@@ -49,7 +49,7 @@ class NavigationDrawer extends StatelessWidget {
                 Icons.exit_to_app,
               ),
             ),
-            title: Text('Log out'),
+            title: Text('Log out', style: TextStyle(fontSize: 18)),
             onTap: () {},
           ),
         ],
