@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:study_group_app/widgets/navigation_drawer.dart';
 
 import '../widgets/filter_drawer.dart';
@@ -7,8 +8,12 @@ import '../widgets/study_group_item.dart';
 
 import 'package:provider/provider.dart';
 import '../providers/study_groups.dart';
+import '../main.dart';
+
 
 class HomePageScreen extends StatelessWidget {
+//  final GoogleSignIn googleSignIn;
+//  HomePageScreen({this.googleSignIn});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
