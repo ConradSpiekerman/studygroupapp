@@ -140,6 +140,13 @@ class StudyGroups with ChangeNotifier {
 
   void addEvent(StudyGroup studyGroup) {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
+
+    groups.forEach((doc) {
+      if (doc.id > lastId) {
+        lastId = doc.id;
+      }
+    });
+
     newGroup.id = lastId++;
     prefs.setInt('lastId', lastId); // write to disk
 
