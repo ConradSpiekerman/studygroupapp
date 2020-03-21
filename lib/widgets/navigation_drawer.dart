@@ -8,8 +8,9 @@ import '../screens/saved_events_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
 
-  Future<void> _signOut() async {
+  Future<void> _signOut(context) async {
     try {
+      Navigator.of(context).pushReplacementNamed('/');
       await FirebaseAuth.instance.signOut();
     } catch (e) {
       print(e); // TODO: show dialog with error
@@ -60,7 +61,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
             title: Text('Log out', style: TextStyle(fontSize: 18)),
-            onTap: _signOut,
+            onTap: () =>_signOut(context),
           ),
         ],
       ),

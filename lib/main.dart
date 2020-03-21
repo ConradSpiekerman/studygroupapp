@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './screens/home_page_screen.dart';
 import './screens/manage_event_screen.dart';
 import './screens/saved_events_screen.dart';
 import './providers/study_groups.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInScreen extends StatelessWidget {
+  static const routeName = './sign_in';
 
   Future<void> _signInAnonymously() async {
     try {
