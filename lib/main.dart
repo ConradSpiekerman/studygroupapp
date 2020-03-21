@@ -6,6 +6,7 @@ import './screens/manage_event_screen.dart';
 import './screens/saved_events_screen.dart';
 import './providers/study_groups.dart';
 import './screens/create_event_screen.dart';
+import './screens/landing_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepPurple,
           fontFamily: 'AdventPro',
         ),
-        home: HomePageScreen(),
+        home: LandingScreen(),
         routes: {
           ManageEventScreen.routeName: (ctx) => ManageEventScreen(),
           SavedEventsScreen.routeName: (ctx) => SavedEventsScreen(),

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:study_group_app/screens/manage_event_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../screens/manage_event_screen.dart';
 import '../screens/saved_events_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
+
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      print(e); // TODO: show dialog with error
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -50,7 +60,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
             title: Text('Log out', style: TextStyle(fontSize: 18)),
-            onTap: () {},
+            onTap: _signOut,
           ),
         ],
       ),
