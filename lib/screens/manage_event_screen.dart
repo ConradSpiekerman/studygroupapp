@@ -18,7 +18,7 @@ class ManageEventScreen extends StatelessWidget {
         title: Text('Manage Events'),
       ),
       body: Container(
-        color: Colors.grey[400],
+        color: Color(0xFFf5f5f5),
         child: ListView.builder(
           itemCount: studyGroups.length,
           itemBuilder: (_, i) => Column(

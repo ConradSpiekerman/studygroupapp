@@ -29,6 +29,7 @@ class HomePageScreen extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: Colors.grey,
       body: FutureBuilder(
         future: Provider.of<StudyGroups>(context, listen: false).fetchGroups(),
         builder: (context, AsyncSnapshot snapshot) {
