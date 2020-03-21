@@ -7,7 +7,6 @@ import '../providers/study_groups.dart';
 import './filter_study_group_chip.dart';
 
 class FilterDrawer extends StatefulWidget {
-
   @override
   _FilterDrawerState createState() => _FilterDrawerState();
 }
@@ -17,18 +16,20 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final studyGroupContainer = Provider.of<StudyGroups>(context, listen: false);
+    final studyGroupContainer =
+        Provider.of<StudyGroups>(context, listen: false);
     final subjects = Provider.of<StudyGroups>(context).getSubjects;
     List<FilterChipWidget> subjectsList = subjects
         .map((name) => FilterChipWidget(
-            chipName: name, isSelected: studyGroupContainer.isSubjectFiltered(name)))
+            chipName: name,
+            isSelected: studyGroupContainer.isSubjectFiltered(name)))
         .toList();
     return Drawer(
       child: Column(
         children: <Widget>[
           Container(
             height: 110,
-            color: Colors.purple,
+            color: Theme.of(context).primaryColor,
             alignment: Alignment.centerLeft,
             child: DrawerHeader(
               child: Text(
@@ -41,7 +42,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
           ),
           ListTile(
-            title: Text('Pick a subject'),
+            title: Text('Pick a subject',
+                style: TextStyle(fontSize: 16,)),
             leading: Icon(Icons.subject),
           ),
           Padding(
@@ -52,11 +54,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
           ),
           Divider(),
           Container(
-            padding: EdgeInsets.all(19.0),
+            padding: EdgeInsets.all(25),
             alignment: Alignment.center,
             child: TextField(
                 decoration: InputDecoration(
                   labelText: 'Pick a time',
+                  labelStyle: TextStyle(fontSize: 16, color: Colors.black87),
                   icon: Icon(Icons.access_time),
                 ),
                 controller: dateTextController,
@@ -80,7 +83,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             width: 170,
             height: 80,
             child: FlatButton(
-              color: Colors.deepPurple,
+              color: Theme.of(context).accentColor,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -92,7 +95,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         )),
                     Text(
                       'Clear Filters',
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(color: Colors.white70, 
+                      fontSize: 16),
                     )
                   ]),
               onPressed: () {

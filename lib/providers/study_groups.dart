@@ -140,6 +140,13 @@ class StudyGroups with ChangeNotifier {
 
   void addEvent(StudyGroup studyGroup) {
     StudyGroup newGroup = _copyStudyGroup(studyGroup);
+
+    groups.forEach((doc) {
+      if (doc.id > lastId) {
+        lastId = doc.id;
+      }
+    });
+
     newGroup.id = lastId++;
     prefs.setInt('lastId', lastId); // write to disk
 
@@ -301,6 +308,7 @@ class StudyGroups with ChangeNotifier {
       });
       _groups.clear();
       _groups.addAll(groups);
+      _groups.sort((a, b) => a.dateTime.compareTo(b.dateTime));
       _subjects.clear();
       _groups.forEach((item) {
         if (_subjects.containsKey(item.subject)) {
@@ -309,7 +317,6 @@ class StudyGroups with ChangeNotifier {
           _subjects[item.subject] = 1;
         }
       });
-
       notifyListeners();
     } catch (error) {
       print("Error while fetching data!");

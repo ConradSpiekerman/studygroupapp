@@ -4,7 +4,6 @@ import 'package:study_group_app/screens/account_screen.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 
-import './screens/home_page_screen.dart';
 import './screens/manage_event_screen.dart';
 import './screens/saved_events_screen.dart';
 import './providers/study_groups.dart';
@@ -33,7 +32,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Study Group Planner',
         theme: ThemeData(
-            primarySwatch: Colors.purple, accentColor: Colors.deepPurple),
+          primarySwatch: Colors.purple,
+          accentColor: Colors.deepPurple,
+          fontFamily: 'AdventPro',
+        ),
         home: LandingScreen(),
         routes: {
           ManageEventScreen.routeName: (ctx) => ManageEventScreen(),

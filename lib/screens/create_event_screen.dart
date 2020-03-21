@@ -21,10 +21,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   final _timeFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
-  var dateTextController = TextEditingController();
-  var timeTextController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  var _dateTextController = TextEditingController();
+  var _timeTextController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
   bool _isInit = true;
   var _editedStudyGroup = StudyGroup(
     id: null,
@@ -57,14 +57,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           'date': '',
           'time': ''
         };
-        dateTextController.text = new DateFormat.yMMMd().format(new DateTime(
+        _selectedDate = new DateTime(
             _editedStudyGroup.dateTime.year,
             _editedStudyGroup.dateTime.month,
-            _editedStudyGroup.dateTime.day));
-        timeTextController.text = new TimeOfDay(
+            _editedStudyGroup.dateTime.day);
+        _selectedTime = new TimeOfDay(
                 hour: _editedStudyGroup.dateTime.hour,
-                minute: _editedStudyGroup.dateTime.minute)
-            .format(context);
+                minute: _editedStudyGroup.dateTime.minute);
+        _dateTextController.text = new DateFormat.yMMMd().format(_selectedDate);
+        _timeTextController.text = _selectedTime.format(context);
       }
     }
     _isInit = false;
@@ -106,7 +107,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     "SUBMIT",
                     style: TextStyle(color: Colors.white70),
                   ),
-                  color: Colors.deepPurple,
+                  color: Theme.of(context).accentColor,
                   onPressed: () {
                     if (_saveForm()) Navigator.pop(context);
                   },
@@ -206,14 +207,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             child: TextFormField(
               decoration: InputDecoration(labelText: 'Date'),
               textInputAction: TextInputAction.next,
-              controller: dateTextController,
+              controller: _dateTextController,
               readOnly: true,
               focusNode: _dateFocusNode,
               validator: (value) {
                 if (value.isEmpty) return "Please enter a date.";
                 DateTime currentDate = new DateTime(DateTime.now().year,
                     DateTime.now().month, DateTime.now().day);
-                if (selectedDate.isBefore(currentDate))
+                if (_selectedDate.isBefore(currentDate))
                   return "Please enter a valid date.";
                 else
                   return null;
@@ -224,9 +225,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               onTap: () => _selectDate(context),
               onSaved: (String value) {
                 _editedStudyGroup.dateTime = new DateTime(
-                  selectedDate.year,
-                  selectedDate.month,
-                  selectedDate.day,
+                  _selectedDate.year,
+                  _selectedDate.month,
+                  _selectedDate.day,
                   (_editedStudyGroup.dateTime != null)
                       ? _editedStudyGroup.dateTime.hour
                       : 0,
@@ -246,13 +247,13 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               focusNode: _timeFocusNode,
               validator: (value) {
                 if (value.isEmpty) return "Please enter a time.";
-                if (!isValidTime(selectedTime))
+                if (!isValidTime(_selectedTime))
                   return "Please enter a valid time.";
                 else
                   return null;
               },
               readOnly: true,
-              controller: timeTextController,
+              controller: _timeTextController,
               onFieldSubmitted: (_) {
                 FocusScope.of(context).requestFocus(_descriptionFocusNode);
               },
@@ -268,8 +269,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   (_editedStudyGroup.dateTime != null)
                       ? _editedStudyGroup.dateTime.day
                       : 0,
-                  selectedTime.hour,
-                  selectedTime.minute,
+                  _selectedTime.hour,
+                  _selectedTime.minute,
                 );
               },
             )),
@@ -279,8 +280,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   bool isValidTime(TimeOfDay time) {
     final currentDate = DateTime.now();
-    final chosenDate = new DateTime(selectedDate.year, selectedDate.month,
-        selectedDate.day, selectedTime.hour, selectedTime.minute);
+    final chosenDate = new DateTime(_selectedDate.year, _selectedDate.month,
+        _selectedDate.day, _selectedTime.hour, _selectedTime.minute);
     return chosenDate.isAfter(currentDate);
   }
 
@@ -303,23 +304,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   Future<void> _selectDate( BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: _selectedDate,
         firstDate: new DateTime(1970, 8),
         lastDate: new DateTime(2101));
     if (picked != null)
       setState(() {
-        dateTextController.text = new DateFormat.yMMMd().format(picked);
-        selectedDate = picked;
+        _dateTextController.text = new DateFormat.yMMMd().format(picked);
+        _selectedDate = picked;
       });
   }
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay picked =
-        await showTimePicker(context: context, initialTime: selectedTime);
+        await showTimePicker(context: context, initialTime: _selectedTime);
     if (picked != null)
       setState(() {
-        timeTextController.text = picked.format(context);
-        selectedTime = picked;
+        _timeTextController.text = picked.format(context);
+        _selectedTime = picked;
       });
   }
 }

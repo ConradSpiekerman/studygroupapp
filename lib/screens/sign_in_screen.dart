@@ -6,10 +6,13 @@ import '../main.dart';
 
 
 class SignInScreen extends StatelessWidget {
+
 //  final GoogleSignIn googleSignIn;
 //  SignInScreen({this.googleSignIn});
 //  @override
 //  State createState() => SignInScreenState();
+
+  static const routeName = './sign_in';
 
 
   Future<void> _signInAnonymously() async {
@@ -23,6 +26,7 @@ class SignInScreen extends StatelessWidget {
   Future<void> _signInWithGoogle() async {
     print("sigining in with google");
     try {
+        googleSignIn.signOut();
         googleSignIn.signIn();
 
         print("we are here");
@@ -38,7 +42,9 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Sign in with Google')),
       body: Center(
         child: RaisedButton(
-          child: Text('Sign in with Google'),
+          child: Text('Sign in with Google',
+          style: TextStyle(fontSize: 18),
+          ),
           onPressed: _signInWithGoogle,
         ),
       ),
