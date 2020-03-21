@@ -17,7 +17,9 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Sign in')),
       body: Center(
         child: RaisedButton(
-          child: Text('Sign in anonymously'),
+          child: Text('Sign in anonymously',
+          style: TextStyle(fontSize: 18),
+          ),
           onPressed: _signInAnonymously,
         ),
       ),

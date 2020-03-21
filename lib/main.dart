@@ -22,7 +22,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Study Group Planner',
         theme: ThemeData(
-            primarySwatch: Colors.purple, accentColor: Colors.deepPurple),
+          primarySwatch: Colors.purple,
+          accentColor: Colors.deepPurple,
+          fontFamily: 'AdventPro',
+        ),
         home: LandingScreen(),
         routes: {
           ManageEventScreen.routeName: (ctx) => ManageEventScreen(),
